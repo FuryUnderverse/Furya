@@ -16,7 +16,7 @@ furyd init --chain-id $CHAIN_ID "$MONIKER"
 # hardcode the validator account for this instance
 (echo "$PASSWORD") | furyd add-genesis-account $USER "100000000000000fury"
 
-(echo "$PASSWORD") | furyd add-genesis-account 'did:fury:furya18hr8jggl3xnrutfujy2jwpeu0l76azprlvgrwt' "100000000000000fury"
+(echo "$PASSWORD") | furyd add-genesis-account 'fury18hr8jggl3xnrutfujy2jwpeu0l76azprlvgrwt' "100000000000000fury"
 
 sed -i "s/enabled-unsafe-cors *= *.*/enabled-unsafe-cors = true/g" .furyd/config/app.toml
 sed -i "s/cors_allowed_origins *= *.*/cors_allowed_origins = \[\"*\"\]/g" .furyd/config/config.toml
