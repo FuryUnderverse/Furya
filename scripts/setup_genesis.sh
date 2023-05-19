@@ -14,9 +14,9 @@ furyad init --chain-id $CHAIN_ID "$MONIKER"
 (echo "$PASSWORD"; echo "$PASSWORD") | furyad keys add $USER 2>&1 | tee account.txt
 
 # hardcode the validator account for this instance
-(echo "$PASSWORD") | furyad add-genesis-account $USER "100000000000000furya"
+(echo "$PASSWORD") | furyad add-genesis-account $USER "100000000000000fury"
 
-(echo "$PASSWORD") | furyad add-genesis-account 'furya18hr8jggl3xnrutfujy2jwpeu0l76azprlvgrwt' "100000000000000furya"
+(echo "$PASSWORD") | furyad add-genesis-account 'furya18hr8jggl3xnrutfujy2jwpeu0l76azprlvgrwt' "100000000000000fury"
 
 sed -i "s/enabled-unsafe-cors *= *.*/enabled-unsafe-cors = true/g" .furyad/config/app.toml
 sed -i "s/cors_allowed_origins *= *.*/cors_allowed_origins = \[\"*\"\]/g" .furyad/config/config.toml

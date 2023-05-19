@@ -9,16 +9,16 @@ furyad keys add bob --keyring-backend=test --home=.furyad/state_sync
 
 echo "-----------------------"
 echo "## Send fund to state sync account"
-furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show wallet -a --keyring-backend=test --home=.furyad/state_sync) 500000furya --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
+furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show wallet -a --keyring-backend=test --home=.furyad/state_sync) 500000fury --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
 
-furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show alice -a --keyring-backend=test --home=.furyad/state_sync) 500000furya --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
+furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show alice -a --keyring-backend=test --home=.furyad/state_sync) 500000fury --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
 
-furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show bob -a --keyring-backend=test --home=.furyad/state_sync) 500000furya --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
+furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show bob -a --keyring-backend=test --home=.furyad/state_sync) 500000fury --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
 
 echo "-----------------------"
 echo "## Create new contract instance"
-INIT='{"purchase_price":{"amount":"100","denom":"furya"},"transfer_price":{"amount":"999","denom":"furya"}}'
-TXFLAG=${TX_FLAG:-"--node tcp://localhost:26647 --chain-id=testing --gas-prices 0.0001furya --gas auto --gas-adjustment 1.3 -b block"}
+INIT='{"purchase_price":{"amount":"100","denom":"fury"},"transfer_price":{"amount":"999","denom":"fury"}}'
+TXFLAG=${TX_FLAG:-"--node tcp://localhost:26647 --chain-id=testing --gas-prices 0.0001fury --gas auto --gas-adjustment 1.3 -b block"}
 
 # Instantiate the first contract. This contract was deploy in multinode-local-testnet.sh script
 furyad tx wasm instantiate 1 "$INIT" --from=wallet --admin="$(furyad keys show wallet -a --keyring-backend=test --home=.furyad/state_sync)" --keyring-backend=test --home=.furyad/state_sync --label "name service" $TXFLAG -y
@@ -35,7 +35,7 @@ echo "$RESP" | jq
 echo "-----------------------"
 echo "## Execute contract $CONTRACT"
 REGISTER='{"register":{"name":"tony"}}'
-furyad tx wasm execute $CONTRACT "$REGISTER" --amount 100furya --from=wallet --keyring-backend=test --home=.furyad/state_sync $TXFLAG -y -b block -o json | jq
+furyad tx wasm execute $CONTRACT "$REGISTER" --amount 100fury --from=wallet --keyring-backend=test --home=.furyad/state_sync $TXFLAG -y -b block -o json | jq
 
 # Query the first contract.
 # Query the owner of the name record
@@ -62,13 +62,13 @@ echo "## Set new admin"
 echo "### Query old admin: $(furyad q wasm contract "$CONTRACT" -o json | jq -r '.contract_info.admin')"
 echo "### Update contract"
 furyad tx wasm set-contract-admin "$CONTRACT" "$(furyad keys show bob -a --keyring-backend=test --home=.furyad/state_sync)" \
-  --from wallet -y --keyring-backend=test --home=.furyad/state_sync --chain-id=testing --gas 200000 --fees 2furya -b block -o json | jq
+  --from wallet -y --keyring-backend=test --home=.furyad/state_sync --chain-id=testing --gas 200000 --fees 2fury -b block -o json | jq
 echo "### Query new admin: $(furyad q wasm contract "$CONTRACT" -o json | jq -r '.contract_info.admin')"
 
 # Migrate the second contract. This contract was deploy in multinode-local-testnet.sh script
 DEST_ACCOUNT=$(furyad keys show bob -a --keyring-backend=test --home=.furyad/state_sync)
 furyad tx wasm migrate "$CONTRACT" 2 "{\"payout\": \"$DEST_ACCOUNT\"}" --from bob \
-  --chain-id=testing --keyring-backend=test --home=.furyad/state_sync --gas 1500000 --fees 150furya -b block -y -o json | jq
+  --chain-id=testing --keyring-backend=test --home=.furyad/state_sync --gas 1500000 --fees 150fury -b block -y -o json | jq
 
 # balances of bob: 500000 + 100 + 999 - 150 = 500949
 echo "### Query destination account: 2"

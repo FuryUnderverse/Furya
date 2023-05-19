@@ -27,11 +27,11 @@ update_genesis () {
 }
 
 # change staking denom to furya
-update_genesis '.app_state["staking"]["params"]["bond_denom"]="furya"'
+update_genesis '.app_state["staking"]["params"]["bond_denom"]="fury"'
 
 # create validator node 1
-furyad add-genesis-account $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) 1000000000000furya,1000000000000stake --home=$HOME/.furyad/validator1
-furyad gentx validator1 500000000furya --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing
+furyad add-genesis-account $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) 1000000000000fury,1000000000000stake --home=$HOME/.furyad/validator1
+furyad gentx validator1 500000000fury --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing
 furyad collect-gentxs --home=$HOME/.furyad/validator1
 furyad validate-genesis --home=$HOME/.furyad/validator1
 
@@ -39,14 +39,14 @@ furyad validate-genesis --home=$HOME/.furyad/validator1
 update_genesis '.app_state["staking"]["params"]["unbonding_time"]="240s"'
 
 # update crisis variable to furya
-update_genesis '.app_state["crisis"]["constant_fee"]["denom"]="furya"'
+update_genesis '.app_state["crisis"]["constant_fee"]["denom"]="fury"'
 
 # udpate gov genesis
 update_genesis '.app_state["gov"]["voting_params"]["voting_period"]="60s"'
-update_genesis '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="furya"'
+update_genesis '.app_state["gov"]["deposit_params"]["min_deposit"][0]["denom"]="fury"'
 
 # update mint genesis
-update_genesis '.app_state["mint"]["params"]["mint_denom"]="furya"'
+update_genesis '.app_state["mint"]["params"]["mint_denom"]="fury"'
 
 # port key (validator1 uses default ports)
 # validator1 1317, 9090, 9091, 26658, 26657, 26656, 6060
@@ -134,27 +134,27 @@ sed -i -E "s|persistent_peers = \"\"|persistent_peers = \"$(furyad tendermint sh
 sed -i -E "s|persistent_peers = \"\"|persistent_peers = \"$(furyad tendermint show-node-id --home=$HOME/.furyad/validator1)@localhost:26656\"|g" $VALIDATOR3_CONFIG
 
 # start all three validators
-screen -S validator1 -d -m furyad start --home=$HOME/.furyad/validator1 --minimum-gas-prices=0.00001furya
-screen -S validator2 -d -m furyad start --home=$HOME/.furyad/validator2 --minimum-gas-prices=0.00001furya
-screen -S validator3 -d -m furyad start --home=$HOME/.furyad/validator3 --minimum-gas-prices=0.00001furya
+screen -S validator1 -d -m furyad start --home=$HOME/.furyad/validator1 --minimum-gas-prices=0.00001fury
+screen -S validator2 -d -m furyad start --home=$HOME/.furyad/validator2 --minimum-gas-prices=0.00001fury
+screen -S validator3 -d -m furyad start --home=$HOME/.furyad/validator3 --minimum-gas-prices=0.00001fury
 
 # send furya from first validator to second validator
 echo "Waiting 7 seconds to send funds to validators 2 and 3..."
 sleep 7
 
-furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show validator2 -a --keyring-backend=test --home=$HOME/.furyad/validator2) 5000000000furya --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
-furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show validator3 -a --keyring-backend=test --home=$HOME/.furyad/validator3) 4000000000furya --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
+furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show validator2 -a --keyring-backend=test --home=$HOME/.furyad/validator2) 5000000000fury --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
+furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$HOME/.furyad/validator1) $(furyad keys show validator3 -a --keyring-backend=test --home=$HOME/.furyad/validator3) 4000000000fury --keyring-backend=test --home=$HOME/.furyad/validator1 --chain-id=testing --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
 
 # create second & third validator
-furyad tx staking create-validator --amount=500000000furya --from=validator2 --pubkey=$(furyad tendermint show-validator --home=$HOME/.furyad/validator2) --moniker="validator2" --chain-id="testing" --commission-rate="0.1" --commission-max-rate="0.2" --commission-max-change-rate="0.05" --min-self-delegation="500000000" --keyring-backend=test --home=$HOME/.furyad/validator2 --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
-furyad tx staking create-validator --amount=400000000furya --from=validator3 --pubkey=$(furyad tendermint show-validator --home=$HOME/.furyad/validator3) --moniker="validator3" --chain-id="testing" --commission-rate="0.1" --commission-max-rate="0.2" --commission-max-change-rate="0.05" --min-self-delegation="400000000" --keyring-backend=test --home=$HOME/.furyad/validator3 --broadcast-mode block --gas 200000 --fees 2furya --node http://localhost:26657 --yes
+furyad tx staking create-validator --amount=500000000fury --from=validator2 --pubkey=$(furyad tendermint show-validator --home=$HOME/.furyad/validator2) --moniker="validator2" --chain-id="testing" --commission-rate="0.1" --commission-max-rate="0.2" --commission-max-change-rate="0.05" --min-self-delegation="500000000" --keyring-backend=test --home=$HOME/.furyad/validator2 --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
+furyad tx staking create-validator --amount=400000000fury --from=validator3 --pubkey=$(furyad tendermint show-validator --home=$HOME/.furyad/validator3) --moniker="validator3" --chain-id="testing" --commission-rate="0.1" --commission-max-rate="0.2" --commission-max-change-rate="0.05" --min-self-delegation="400000000" --keyring-backend=test --home=$HOME/.furyad/validator3 --broadcast-mode block --gas 200000 --fees 2fury --node http://localhost:26657 --yes
 
 echo "All 3 Validators are up and running!"
 
 echo "-----------------------"
 echo "## Add new CosmWasm contract"
 RESP=$(furyad tx wasm store scripts/wasm_file/cw_nameservice-aarch64.wasm \
---from=validator1 --keyring-backend=test --home=$HOME/.furyad/validator1 --gas 1500000 --fees 150furya --chain-id="testing" -y --node=http://localhost:26657 -b block -o json)
+--from=validator1 --keyring-backend=test --home=$HOME/.furyad/validator1 --gas 1500000 --fees 150fury --chain-id="testing" -y --node=http://localhost:26657 -b block -o json)
 
 # first contract with code id = 1
 CODE_ID=$(echo "$RESP" | jq -r '.logs[0].events[1].attributes[-1].value')
@@ -166,7 +166,7 @@ echo "-----------------------"
 echo "## Migrate contract"
 echo "### Upload new code"
 RESP=$(furyad tx wasm store scripts/wasm_file/burner.wasm \
-  --from=validator1 --keyring-backend=test --home=$HOME/.furyad/validator1 --node=http://localhost:26657 --gas 1500000 --fees 150furya --chain-id="testing" -y -b block -o json)
+  --from=validator1 --keyring-backend=test --home=$HOME/.furyad/validator1 --node=http://localhost:26657 --gas 1500000 --fees 150fury --chain-id="testing" -y -b block -o json)
 
 # second contract with code id = 2
 CODE_ID=$(echo "$RESP" | jq -r '.logs[0].events[1].attributes[-1].value')

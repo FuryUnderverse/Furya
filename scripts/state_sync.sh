@@ -85,4 +85,4 @@ echo "Waiting 1 seconds to start state sync"
 sleep 1
 
 # THERE, NOW IT'S SYNCED AND YOU CAN PLAY
-screen -S state_sync -d -m furyad start --home=.furyad/state_sync --minimum-gas-prices=0.00001furya
+screen -S state_sync -d -m furyad start --home=.furyad/state_sync --minimum-gas-prices=0.00001fury

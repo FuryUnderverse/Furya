@@ -203,7 +203,7 @@ addGenAccount(){
   amount=$(getArgument "amount" "100000000000000")
   genesis=.furyad/config/genesis.json
   account='{"@type":"/cosmos.auth.v1beta1.BaseAccount","address":"'$address'","pub_key":null,"account_number":"0","sequence":"0"}'
-  balance='{"address":"'$address'","coins":[{"denom":"furya","amount":"'$amount'"}]}'
+  balance='{"address":"'$address'","coins":[{"denom":"fury","amount":"'$amount'"}]}'
 
   exsited_account=$(jq '.app_state.auth.accounts[] | select(.address == "'$address'")' $genesis)
   exsited_balance=$(jq '.app_state.bank.balances[] | select(.address == "'$address'")' $genesis)
@@ -328,7 +328,7 @@ createValidatorFn() {
 
   local gasPrices=$(getArgument "gas_prices" $GAS_PRICES)
   if [[ $gasPrices == "" ]]; then
-    gasPrices="0.000000000025furya"
+    gasPrices="0.000000000025fury"
   fi
   local securityContract=$(getArgument "security_contract" $SECURITY_CONTRACT)
   local identity=$(getArgument "identity" $IDENTITY)

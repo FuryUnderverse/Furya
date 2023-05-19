@@ -4,7 +4,7 @@
 
 OLD_VERSION=${OLD_VERSION:-"v0.41.1"}
 WASM_PATH=${WASM_PATH:-"../furyawasm/package/plus/swapmap/artifacts/swapmap.wasm"}
-ARGS="--chain-id testing -y --keyring-backend test --fees 200furya --gas auto --gas-adjustment 1.5 -b block"
+ARGS="--chain-id testing -y --keyring-backend test --fees 200fury --gas auto --gas-adjustment 1.5 -b block"
 NEW_VERSION=${NEW_VERSION:-"v0.41.2"}
 VALIDATOR_HOME=${VALIDATOR_HOME:-"$HOME/.furyad/validator1"}
 MIGRATE_MSG=${MIGRATE_MSG:-'{}'}
@@ -30,7 +30,7 @@ echo "contract address: $contract_address"
 
 # # create new upgrade proposal
 UPGRADE_HEIGHT=${UPGRADE_HEIGHT:-30}
-furyad tx gov submit-proposal software-upgrade $NEW_VERSION --title "foobar" --description "foobar"  --from validator1 --upgrade-height $UPGRADE_HEIGHT --upgrade-info "x" --deposit 10000000furya $ARGS --home $VALIDATOR_HOME
+furyad tx gov submit-proposal software-upgrade $NEW_VERSION --title "foobar" --description "foobar"  --from validator1 --upgrade-height $UPGRADE_HEIGHT --upgrade-info "x" --deposit 10000000fury $ARGS --home $VALIDATOR_HOME
 furyad tx gov vote 1 yes --from validator1 --home "$HOME/.furyad/validator1" $ARGS && furyad tx gov vote 1 yes --from validator2 --home "$HOME/.furyad/validator2" $ARGS
 
 # sleep to wait til the proposal passes
@@ -45,9 +45,9 @@ echo "install new binary"
 make install
 
 # re-run all validators. All should run
-screen -S validator1 -d -m furyad start --home=$HOME/.furyad/validator1 --minimum-gas-prices=0.00001furya
-screen -S validator2 -d -m furyad start --home=$HOME/.furyad/validator2 --minimum-gas-prices=0.00001furya
-screen -S validator3 -d -m furyad start --home=$HOME/.furyad/validator3 --minimum-gas-prices=0.00001furya
+screen -S validator1 -d -m furyad start --home=$HOME/.furyad/validator1 --minimum-gas-prices=0.00001fury
+screen -S validator2 -d -m furyad start --home=$HOME/.furyad/validator2 --minimum-gas-prices=0.00001fury
+screen -S validator3 -d -m furyad start --home=$HOME/.furyad/validator3 --minimum-gas-prices=0.00001fury
 
 # sleep a bit for the network to start 
 echo "Sleep to wait for the network to start and wait for new snapshot intervals are after the upgrade to take place..."
@@ -64,7 +64,7 @@ sleep 1m
 furyad keys add alice --keyring-backend=test --home=$STATE_SYNC_HOME
 
 echo "## Send fund to state sync account"
-furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$VALIDATOR_HOME) $(furyad keys show alice -a --keyring-backend=test --home=$STATE_SYNC_HOME) 500000furya --home=$VALIDATOR_HOME --node http://localhost:26657 $ARGS
+furyad tx send $(furyad keys show validator1 -a --keyring-backend=test --home=$VALIDATOR_HOME) $(furyad keys show alice -a --keyring-backend=test --home=$STATE_SYNC_HOME) 500000fury --home=$VALIDATOR_HOME --node http://localhost:26657 $ARGS
 
 echo "Sleep 6s to prevent account sequence error"
 sleep 6s
