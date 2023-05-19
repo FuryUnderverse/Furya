@@ -16,7 +16,7 @@ do
     sh $PWD/scripts/deploy-contract-store-addr.sh $DIR_PATH/smart-contracts/$i/artifacts/$i.wasm "$i $NONCE" "$DS_INPUT" $PASS
 
     # check if the data source exists or not
-    furyad query provider dsource $i 2> is_exist.txt
+    furyd query provider dsource $i 2> is_exist.txt
     description="test $i"
     address=$(cat ../address.txt)
     echo "address: $address"
@@ -26,10 +26,10 @@ do
     # if the file is not empty, then the data source does not exist. We create new
     if [ -s is_exist.txt ]
     then
-        echo $PASS | furyad tx provider set-datasource $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
+        echo $PASS | furyd tx provider set-datasource $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
     else
         # if it exists already, we update the contract
-        echo $PASS | furyad tx provider edit-datasource $i $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
+        echo $PASS | furyd tx provider edit-datasource $i $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
     fi
 
 done

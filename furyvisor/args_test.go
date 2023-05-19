@@ -1,4 +1,4 @@
-package furyavisor
+package furyvisor
 
 import (
 	"fmt"
@@ -36,7 +36,7 @@ func (s *argsTestSuite) TestConfigPaths() {
 			upgradeName:   "some spaces",
 			expectRoot:    fmt.Sprintf("/longer/prefix/%s", rootName),
 			expectGenesis: fmt.Sprintf("/longer/prefix/%s/genesis/bin/yourd", rootName),
-			expectUpgrade: "/longer/prefix/furyavisor/upgrades/some%20spaces/bin/yourd",
+			expectUpgrade: "/longer/prefix/furyvisor/upgrades/some%20spaces/bin/yourd",
 		},
 	}
 

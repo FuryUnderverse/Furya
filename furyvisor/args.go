@@ -1,4 +1,4 @@
-package furyavisor
+package furyvisor
 
 import (
 	"bufio"
@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	rootName    = "furyavisor"
+	rootName    = "furyvisor"
 	genesisDir  = "genesis"
 	upgradesDir = "upgrades"
 	currentLink = "current"
@@ -121,7 +121,7 @@ func GetConfigFromEnv() (*Config, error) {
 }
 
 // validate returns an error if this config is invalid.
-// it enforces Home/furyavisor is a valid directory and exists,
+// it enforces Home/furyvisor is a valid directory and exists,
 // and that Name is set
 func (cfg *Config) validate() error {
 	if cfg.Name == "" {

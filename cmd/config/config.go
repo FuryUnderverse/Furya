@@ -1,5 +1,5 @@
 package config
 
 var (
-	Bech32Prefix = "furya"
+	Bech32Prefix = "fury"
 )

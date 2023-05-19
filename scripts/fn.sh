@@ -56,7 +56,7 @@ printHelp () {
     printBoldColor $BROWN "      - 'broadcast' - broadcast transaction"
     printBoldColor $BLUE  "          fn broadcast --key value"           
     echo
-    printBoldColor $BROWN "      - 'init' - Init the furya node"
+    printBoldColor $BROWN "      - 'init' - Init the fury node"
     printBoldColor $BLUE  "          fn init"           
     echo
     printBoldColor $BROWN "      - 'sign' - sign transaction"
@@ -171,15 +171,15 @@ esac
 
 
 clear(){
-    rm -rf .furyad/    
+    rm -rf .furyd/    
 }
 
-furyadFn(){
-    pkill furyad
-    pkill furyavisor
-    if [[ -d "$PWD/.furyad/" ]] 
+furydFn(){
+    pkill furyd
+    pkill furyvisor
+    if [[ -d "$PWD/.furyd/" ]] 
     then
-      furyavisor start --rpc.laddr tcp://0.0.0.0:26657 --log_level $(getArgument "log_level" $LOG_LEVEL) --p2p.seeds $(getArgument "seeds" $SEEDS) --p2p.seed_mode $(getArgument "seed_mode" false)
+      furyvisor start --rpc.laddr tcp://0.0.0.0:26657 --log_level $(getArgument "log_level" $LOG_LEVEL) --p2p.seeds $(getArgument "seeds" $SEEDS) --p2p.seed_mode $(getArgument "seed_mode" false)
     else
       tail -f /dev/null 
     fi
@@ -201,7 +201,7 @@ addGenAccount(){
   fi 
 
   amount=$(getArgument "amount" "100000000000000")
-  genesis=.furyad/config/genesis.json
+  genesis=.furyd/config/genesis.json
   account='{"@type":"/cosmos.auth.v1beta1.BaseAccount","address":"'$address'","pub_key":null,"account_number":"0","sequence":"0"}'
   balance='{"address":"'$address'","coins":[{"denom":"fury","amount":"'$amount'"}]}'
 
@@ -221,11 +221,11 @@ initFn(){
   checkExpectProgram
   
   ### Check if a directory does not exist ###
-  if [[ ! -d "$PWD/.furyad/" ]] 
+  if [[ ! -d "$PWD/.furyd/" ]] 
   then
     echo "Directory /path/to/dir DOES NOT exists."
 
-    furyad init $(getArgument "moniker" $MONIKER) --chain-id Furyunderverse
+    furyd init $(getArgument "moniker" $MONIKER) --chain-id Furyunderverse
 
     requirePass
 
@@ -247,7 +247,7 @@ initFn(){
 
     expect << EOF
 
-        spawn furyad keys add $USER --recover
+        spawn furyd keys add $USER --recover
         expect {
           "override the existing name*" {send -- "y\r"}
         }
@@ -266,17 +266,17 @@ EOF
 
     # download genesis json file
   
-    wget -O .furyad/config/genesis.json $GENESIS_URL
+    wget -O .furyd/config/genesis.json $GENESIS_URL
     
-    # rm -f .furyad/config/genesis.json && wget https://raw.githubusercontent.com/furyunderverse/furyunderverse-static-files/ducphamle2-test/genesis.json -q -P .furyad/config/
+    # rm -f .furyd/config/genesis.json && wget https://raw.githubusercontent.com/furyunderverse/furyunderverse-static-files/ducphamle2-test/genesis.json -q -P .furyd/config/
 
     # add persistent peers to listen to blocks
     local persistentPeers=$(getArgument "persistent_peers" "$SEEDS")
-    # [ ! -z $persistentPeers ] && sed -i 's/seeds *= *".*"/seeds = "'"$persistentPeers"'"/g' .furyad/config/config.toml 
+    # [ ! -z $persistentPeers ] && sed -i 's/seeds *= *".*"/seeds = "'"$persistentPeers"'"/g' .furyd/config/config.toml 
 
-    # sed -i 's/persistent_peers *= *".*"/persistent_peers = "25e3dd0839fa44a89735b38b7b749acdfac8438e@164.90.180.95:26656,e07a89a185c538820258b977b01b44a806dfcece@157.230.22.169:26656,db13b4e2d1fd922640904590d6c9b5ae698de85c@165.232.118.44:26656,b46c45fdbb59ef0509d93e89e574b2080a146b14@178.128.61.252:26656,2a8c59cfdeccd2ed30471b90f626da09adcf3342@178.128.57.195:26656,b495da1980d3cd7c3686044e800412af53ae4be4@159.89.206.139:26656,addb91a1dbc48ffb7ddba30964ae649343179822@178.128.220.155:26656"/g' .furyad/config/config.toml
+    # sed -i 's/persistent_peers *= *".*"/persistent_peers = "25e3dd0839fa44a89735b38b7b749acdfac8438e@164.90.180.95:26656,e07a89a185c538820258b977b01b44a806dfcece@157.230.22.169:26656,db13b4e2d1fd922640904590d6c9b5ae698de85c@165.232.118.44:26656,b46c45fdbb59ef0509d93e89e574b2080a146b14@178.128.61.252:26656,2a8c59cfdeccd2ed30471b90f626da09adcf3342@178.128.57.195:26656,b495da1980d3cd7c3686044e800412af53ae4be4@159.89.206.139:26656,addb91a1dbc48ffb7ddba30964ae649343179822@178.128.220.155:26656"/g' .furyd/config/config.toml
 
-    furyad validate-genesis
+    furyd validate-genesis
     # done init
   fi
 }
@@ -285,12 +285,12 @@ createValidatorFn() {
   local user=$(getArgument "user" $USER)
   # run at background without websocket
   # # 30 seconds timeout to check if the node is alive or not, the '&' symbol allows to run below commands while still having the process running
-  # furyad start &
+  # furyd start &
   # 30 seconds timeout  
   timeout 30 bash -c 'while [[ -z `wget --spider -S localhost:26657/health 2>&1 | grep "HTTP/.*200"` ]]; do sleep 1; done' || false
 
   local amount=$(getArgument "amount" $AMOUNT)
-  local pubkey=$(furyad tendermint show-validator)
+  local pubkey=$(furyd tendermint show-validator)
   local moniker=$(getArgument "moniker" $MONIKER)
   if [[ $moniker == "" ]]; then
     moniker="$USER"_"Furyunderverse"_$(($RANDOM%100000000000))
@@ -339,7 +339,7 @@ createValidatorFn() {
   requirePass
   sleep 5
 
-  (echo "$PASS"; echo "$PASS") | furyad tx staking create-validator --amount $amount --pubkey $pubkey --moniker $moniker --chain-id Furyunderverse --commission-rate $commissionRate --commission-max-rate $commissionMaxRate --commission-max-change-rate $commissionMaxChangeRate --min-self-delegation $minDelegation --gas $gas --gas-prices $gasPrices --security-contact $securityContract --identity $identity --website $website --details $details --from $user -y
+  (echo "$PASS"; echo "$PASS") | furyd tx staking create-validator --amount $amount --pubkey $pubkey --moniker $moniker --chain-id Furyunderverse --commission-rate $commissionRate --commission-max-rate $commissionMaxRate --commission-max-change-rate $commissionMaxChangeRate --min-self-delegation $minDelegation --gas $gas --gas-prices $gasPrices --security-contact $securityContract --identity $identity --website $website --details $details --from $user -y
 }
 
 USER=$(getArgument "user" $USER)
@@ -353,7 +353,7 @@ case "${METHOD}" in
     initFn
   ;;
   start)
-    furyadFn
+    furydFn
   ;;
   initScript)
     initScriptFn

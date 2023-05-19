@@ -1,6 +1,6 @@
 // +build linux
 
-package furyavisor_test
+package furyvisor_test
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 	"github.com/otiai10/copy"
 	"github.com/stretchr/testify/require"
 
-	"github.com/furyunderverse/furya/furyavisor"
+	"github.com/furyunderverse/fury/furyvisor"
 )
 
 type upgradeTestSuite struct {
@@ -27,7 +27,7 @@ func TestUpgradeTestSuite(t *testing.T) {
 
 func (s *upgradeTestSuite) TestCurrentBin() {
 	home := copyTestData(s.T(), "validate")
-	cfg := furyavisor.Config{Home: home, Name: "dummyd"}
+	cfg := furyvisor.Config{Home: home, Name: "dummyd"}
 
 	currentBin, err := cfg.CurrentBin()
 	s.Require().NoError(err)
@@ -59,7 +59,7 @@ func (s *upgradeTestSuite) TestCurrentBin() {
 
 func (s *upgradeTestSuite) TestCurrentAlwaysSymlinkToDirectory() {
 	home := copyTestData(s.T(), "validate")
-	cfg := furyavisor.Config{Home: home, Name: "dummyd"}
+	cfg := furyvisor.Config{Home: home, Name: "dummyd"}
 
 	currentBin, err := cfg.CurrentBin()
 	s.Require().NoError(err)
@@ -74,7 +74,7 @@ func (s *upgradeTestSuite) TestCurrentAlwaysSymlinkToDirectory() {
 	s.assertCurrentLink(cfg, filepath.Join("upgrades", "chain2"))
 }
 
-func (s *upgradeTestSuite) assertCurrentLink(cfg furyavisor.Config, target string) {
+func (s *upgradeTestSuite) assertCurrentLink(cfg furyvisor.Config, target string) {
 	link := filepath.Join(cfg.Root(), "current")
 	// ensure this is a symlink
 	info, err := os.Lstat(link)
@@ -90,7 +90,7 @@ func (s *upgradeTestSuite) assertCurrentLink(cfg furyavisor.Config, target strin
 // TODO: test with download (and test all download functions)
 func (s *upgradeTestSuite) TestDoUpgradeNoDownloadUrl() {
 	home := copyTestData(s.T(), "validate")
-	cfg := &furyavisor.Config{Home: home, Name: "dummyd", AllowDownloadBinaries: true}
+	cfg := &furyvisor.Config{Home: home, Name: "dummyd", AllowDownloadBinaries: true}
 
 	currentBin, err := cfg.CurrentBin()
 	s.Require().NoError(err)
@@ -99,8 +99,8 @@ func (s *upgradeTestSuite) TestDoUpgradeNoDownloadUrl() {
 
 	// do upgrade ignores bad files
 	for _, name := range []string{"missing", "nobin", "noexec"} {
-		info := &furyavisor.UpgradeInfo{Name: name}
-		err = furyavisor.DoUpgrade(cfg, info)
+		info := &furyvisor.UpgradeInfo{Name: name}
+		err = furyvisor.DoUpgrade(cfg, info)
 		s.Require().Error(err, name)
 		currentBin, err := cfg.CurrentBin()
 		s.Require().NoError(err)
@@ -110,8 +110,8 @@ func (s *upgradeTestSuite) TestDoUpgradeNoDownloadUrl() {
 	// make sure it updates a few times
 	for _, upgrade := range []string{"chain2", "chain3"} {
 		// now set it to a valid upgrade and make sure CurrentBin is now set properly
-		info := &furyavisor.UpgradeInfo{Name: upgrade}
-		err = furyavisor.DoUpgrade(cfg, info)
+		info := &furyvisor.UpgradeInfo{Name: upgrade}
+		err = furyvisor.DoUpgrade(cfg, info)
 		s.Require().NoError(err)
 		// we should see current point to the new upgrade dir
 		upgradeBin := cfg.UpgradeBin(upgrade)
@@ -124,7 +124,7 @@ func (s *upgradeTestSuite) TestDoUpgradeNoDownloadUrl() {
 
 func (s *upgradeTestSuite) TestOsArch() {
 	// all download tests will fail if we are not on linux...
-	s.Require().Equal("linux/amd64", furyavisor.OSArch())
+	s.Require().Equal("linux/amd64", furyvisor.OSArch())
 }
 
 func (s *upgradeTestSuite) TestGetDownloadURL() {
@@ -144,7 +144,7 @@ func (s *upgradeTestSuite) TestGetDownloadURL() {
 		},
 		"follow reference": {
 			info: ref,
-			url:  "https://github.com/cosmos/cosmos-sdk/raw/aa5d6140ad4011bb33d472dca8246a0dcbe223ee/furyavisor/testdata/repo/zip_directory/autod.zip?checksum=sha256:3784e4574cad69b67e34d4ea4425eff140063a3870270a301d6bb24a098a27ae",
+			url:  "https://github.com/cosmos/cosmos-sdk/raw/aa5d6140ad4011bb33d472dca8246a0dcbe223ee/furyvisor/testdata/repo/zip_directory/autod.zip?checksum=sha256:3784e4574cad69b67e34d4ea4425eff140063a3870270a301d6bb24a098a27ae",
 		},
 		"malformated reference target": {
 			info:  badref,
@@ -173,7 +173,7 @@ func (s *upgradeTestSuite) TestGetDownloadURL() {
 	}
 
 	for _, tc := range cases {
-		url, err := furyavisor.GetDownloadURL(&furyavisor.UpgradeInfo{Info: tc.info})
+		url, err := furyvisor.GetDownloadURL(&furyvisor.UpgradeInfo{Info: tc.info})
 		if tc.isErr {
 			s.Require().Error(err)
 		} else {
@@ -230,7 +230,7 @@ func (s *upgradeTestSuite) TestDownloadBinary() {
 		// make temp dir
 		home := copyTestData(s.T(), "download")
 
-		cfg := &furyavisor.Config{
+		cfg := &furyvisor.Config{
 			Home:                  home,
 			Name:                  "autod",
 			AllowDownloadBinaries: true,
@@ -244,19 +244,19 @@ func (s *upgradeTestSuite) TestDownloadBinary() {
 		}
 
 		upgrade := "amazonas"
-		info := &furyavisor.UpgradeInfo{
+		info := &furyvisor.UpgradeInfo{
 			Name: upgrade,
-			Info: fmt.Sprintf(`{"binaries":{"%s": "%s"}}`, furyavisor.OSArch(), url),
+			Info: fmt.Sprintf(`{"binaries":{"%s": "%s"}}`, furyvisor.OSArch(), url),
 		}
 
-		err = furyavisor.DownloadBinary(cfg, info)
+		err = furyvisor.DownloadBinary(cfg, info)
 		if !tc.canDownload {
 			s.Require().Error(err)
 			return
 		}
 		s.Require().NoError(err)
 
-		err = furyavisor.EnsureBinary(cfg.UpgradeBin(upgrade))
+		err = furyvisor.EnsureBinary(cfg.UpgradeBin(upgrade))
 		if tc.validBinary {
 			s.Require().NoError(err)
 		} else {

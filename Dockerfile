@@ -24,5 +24,5 @@ RUN wget -O /lib/libwasmvm_muslc.a https://github.com/furyunderverse/wasmvm/rele
 
 # # force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN make build LEDGER_ENABLED=false BUILD_TAGS=muslc GOMOD_FLAGS= VERSION=0.41.2
-RUN cp /workspace/build/furyad /bin/furyad
-RUN upx --best --lzma /workspace/build/furyad
+RUN cp /workspace/build/furyd /bin/furyd
+RUN upx --best --lzma /workspace/build/furyd

@@ -1,4 +1,4 @@
-module github.com/furyunderverse/furya
+module github.com/furyunderverse/fury
 
 go 1.18
 

@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
 
-all: furyavisor test
+all: furyvisor test
 
 build:
-	go build -mod=readonly -o build/furyavisor ./cmd/furyavisor
+	go build -mod=readonly -o build/furyvisor ./cmd/furyvisor
 
 test:
 	go test -mod=readonly -race ./...

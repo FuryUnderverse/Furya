@@ -47,7 +47,7 @@ ifeq ($(LEDGER_ENABLED),true)
   endif
 endif
 
-ifeq (cleveldb,$(findstring cleveldb,$(FURYA_BUILD_OPTIONS)))
+ifeq (cleveldb,$(findstring cleveldb,$(FURY_BUILD_OPTIONS)))
   build_tags += gcc cleveldb
 endif
 build_tags += $(BUILD_TAGS)
@@ -60,14 +60,14 @@ build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
 # process linker flags
 
-ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=furya \
-		  -X github.com/cosmos/cosmos-sdk/version.AppName=furyad \
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=fury \
+		  -X github.com/cosmos/cosmos-sdk/version.AppName=furyd \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
 			-X github.com/tendermint/tendermint/version.TMCoreSemVer=$(TM_VERSION)
 
-ifeq (cleveldb,$(findstring cleveldb,$(FURYA_BUILD_OPTIONS)))
+ifeq (cleveldb,$(findstring cleveldb,$(FURY_BUILD_OPTIONS)))
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
 endif
 ifeq ($(LINK_STATICALLY),true)
@@ -79,7 +79,7 @@ ldflags := $(strip $(ldflags))
 
 BUILD_FLAGS := -mod=readonly -tags "$(build_tags)" -ldflags '$(ldflags)'
 # check for nostrip option
-ifeq (,$(findstring nostrip,$(FURYA_BUILD_OPTIONS)))
+ifeq (,$(findstring nostrip,$(FURY_BUILD_OPTIONS)))
   BUILD_FLAGS += -trimpath
 endif
  
@@ -89,12 +89,12 @@ endif
 all: install
 
 install: go.sum
-	go install -mod=readonly $(BUILD_FLAGS) ./cmd/furyad
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/furyd
 
 build:
-	go build $(BUILD_FLAGS) -o build/furyad ./cmd/furyad
+	go build $(BUILD_FLAGS) -o build/furyd ./cmd/furyd
 
-  # the furyad binary will be built to the root directory of the project (if in docker container then it's workspace/furyad)
+  # the furyd binary will be built to the root directory of the project (if in docker container then it's workspace/furyd)
 
 ###############################################################################
 ###                                Protobuf                                 ###

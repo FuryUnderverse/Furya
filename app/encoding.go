@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/cosmos/cosmos-sdk/std"
-	appparams "github.com/furyunderverse/furya/app/params"
+	appparams "github.com/furyunderverse/fury/app/params"
 )
 
 // MakeEncodingConfig creates an EncodingConfig for gravity.

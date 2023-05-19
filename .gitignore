@@ -49,10 +49,10 @@ dependency-graph.png
 contract_tests/*
 
 .devcontainer/
-.furyacli/
-.furyad*
+.furycli/
+.furyd*
 .wasmd/
-furyawasm/
+furywasm/
 .registry_cache/
 .ash_history
 .bash_history
@@ -80,4 +80,4 @@ Cargo.lock
 **/*.rs.bk
 
 manifest.json
-furyad
+furyd

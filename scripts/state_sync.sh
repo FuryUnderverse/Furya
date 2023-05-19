@@ -1,13 +1,13 @@
 # PRINT EVERY COMMAND
 set -ux
 
-rm -rf .furyad/
+rm -rf .furyd/
 
 moniker="NODE_SYNC"
 
-# make furya state sync directories
-mkdir .furyad
-mkdir .furyad/state_sync
+# make fury state sync directories
+mkdir .furyd
+mkdir .furyd/state_sync
 
 SNAP_RPC2="http://0.0.0.0:26651"
 SNAP_RPC1="http://0.0.0.0:26657"
@@ -25,15 +25,15 @@ echo "peer id: $PEER_ID"
 PEER="$PEER_ID@0.0.0.0:$PEER_P2P_PORT"
 
 # MAKE HOME FOLDER AND GET GENESIS
-furyad init $moniker --chain-id $CHAIN_ID --home=.furyad/state_sync
-cp ~/.furyad/validator1/config/genesis.json .furyad/state_sync/config
-# cp -R ~/.furyad/validator1/wasm .furyad/state_sync/
+furyd init $moniker --chain-id $CHAIN_ID --home=.furyd/state_sync
+cp ~/.furyd/validator1/config/genesis.json .furyd/state_sync/config
+# cp -R ~/.furyd/validator1/wasm .furyd/state_sync/
 
 # reset the node
-furyad tendermint unsafe-reset-all --home=.furyad/state_sync
+furyd tendermint unsafe-reset-all --home=.furyd/state_sync
 
 # change app.toml values
-STATESYNC_APP_TOML=.furyad/state_sync/config/app.toml
+STATESYNC_APP_TOML=.furyd/state_sync/config/app.toml
 
 # state_sync
 sed -i -E 's|tcp://0.0.0.0:1317|tcp://0.0.0.0:1350|g' $STATESYNC_APP_TOML
@@ -41,7 +41,7 @@ sed -i -E 's|0.0.0.0:9090|0.0.0.0:9080|g' $STATESYNC_APP_TOML
 sed -i -E 's|0.0.0.0:9091|0.0.0.0:9081|g' $STATESYNC_APP_TOML
 
 # change config.toml values
-STATESYNC_CONFIG=.furyad/state_sync/config/config.toml
+STATESYNC_CONFIG=.furyd/state_sync/config/config.toml
 
 # state sync node
 sed -i -E 's|tcp://127.0.0.1:26658|tcp://0.0.0.0:26648|g' $STATESYNC_CONFIG
@@ -85,4 +85,4 @@ echo "Waiting 1 seconds to start state sync"
 sleep 1
 
 # THERE, NOW IT'S SYNCED AND YOU CAN PLAY
-screen -S state_sync -d -m furyad start --home=.furyad/state_sync --minimum-gas-prices=0.00001fury
+screen -S state_sync -d -m furyd start --home=.furyd/state_sync --minimum-gas-prices=0.00001fury

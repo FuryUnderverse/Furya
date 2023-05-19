@@ -16,7 +16,7 @@ COPY doc/statik /workspace/doc/statik
 COPY go.mod /workspace/
 COPY go.sum /workspace/
 COPY Makefile /workspace/
-COPY furyavisor/ /workspace/furyavisor
+COPY furyvisor/ /workspace/furyvisor
 
 # See https://github.com/Furyunderverse/wasmvm/releases (tag v1.2.0)
 RUN wget -O /lib/libwasmvm_muslc.a https://github.com/furyunderverse/wasmvm/releases/download/v1.2.0/libwasmvm_muslc.a
@@ -25,11 +25,11 @@ RUN wget -O /lib/libwasmvm_muslc.a https://github.com/furyunderverse/wasmvm/rele
 
 # # force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN make build LEDGER_ENABLED=false BUILD_TAGS=muslc GOMOD_FLAGS= VERSION=0.41.2
-RUN upx --best --lzma /workspace/build/furyad
+RUN upx --best --lzma /workspace/build/furyd
 
-# install furyavisor
-RUN cd furyavisor && make build
-RUN upx --best --lzma /workspace/furyavisor/build/furyavisor
+# install furyvisor
+RUN cd furyvisor && make build
+RUN upx --best --lzma /workspace/furyvisor/build/furyvisor
 
 # # then remove
 # RUN rm -rf /workspace/*
@@ -40,15 +40,15 @@ WORKDIR /workspace
 
 RUN apk update
 
-# need to install build-base to run go furyad binary
+# need to install build-base to run go furyd binary
 RUN apk add bash build-base jq
 
-ENV DAEMON_ALLOW_DOWNLOAD_BINARIES=true DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_NAME=furyad DAEMON_HOME=/root
-ENV PATH="${DAEMON_HOME}/furyavisor/current/bin:${PATH}"
-RUN mkdir -p $DAEMON_HOME/furyavisor/genesis/bin 
+ENV DAEMON_ALLOW_DOWNLOAD_BINARIES=true DAEMON_RESTART_AFTER_UPGRADE=true DAEMON_NAME=furyd DAEMON_HOME=/root
+ENV PATH="${DAEMON_HOME}/furyvisor/current/bin:${PATH}"
+RUN mkdir -p $DAEMON_HOME/furyvisor/genesis/bin 
 
-# init first symbolic link to run furyad and later furyavisor will update the link
-RUN ln -s $DAEMON_HOME/furyavisor/genesis $DAEMON_HOME/furyavisor/current
+# init first symbolic link to run furyd and later furyvisor will update the link
+RUN ln -s $DAEMON_HOME/furyvisor/genesis $DAEMON_HOME/furyvisor/current
 
-COPY --from=builder /workspace/furyavisor/build/furyavisor /usr/bin
-COPY --from=builder /workspace/build/furyad $DAEMON_HOME/furyavisor/genesis/bin
+COPY --from=builder /workspace/furyvisor/build/furyvisor /usr/bin
+COPY --from=builder /workspace/build/furyd $DAEMON_HOME/furyvisor/genesis/bin

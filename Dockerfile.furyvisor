@@ -9,15 +9,15 @@ RUN apk add make git upx
 # RUN apk add libusb-dev linux-headers
 
 WORKDIR /code
-COPY furyavisor /code
+COPY furyvisor /code
 
 RUN make build
 
 # make size smaller
-RUN goupx /code/build/furyavisor
+RUN goupx /code/build/furyvisor
 
-# ----- Update furyavisor from mainnet-alpine ---------------------------------------------------
-FROM furya/furya:0.20.1-alpine
+# ----- Update furyvisor from mainnet-alpine ---------------------------------------------------
+FROM fury/fury:0.20.1-alpine
 
 # copy binaries
-COPY --from=go-builder /code/build/furyavisor /usr/bin
+COPY --from=go-builder /code/build/furyvisor /usr/bin

@@ -8,19 +8,19 @@ CHAIN_ID=${CHAIN_ID:-Furyunderverse}
 USER=${USER:-tupt}
 MONIKER=${MONIKER:-node001}
 # PASSWORD=${PASSWORD:-$1}
-rm -rf .furyad/
+rm -rf .furyd/
 
-furyad init --chain-id "$CHAIN_ID" "$MONIKER"
+furyd init --chain-id "$CHAIN_ID" "$MONIKER"
 
-(echo "$PASSWORD"; echo "$PASSWORD") | furyad keys add $USER
+(echo "$PASSWORD"; echo "$PASSWORD") | furyd keys add $USER
 
 # hardcode the validator account for this instance
-(echo "$PASSWORD") | furyad add-genesis-account $USER "100000000000000fury"
+(echo "$PASSWORD") | furyd add-genesis-account $USER "100000000000000fury"
 
 # submit a genesis validator tx
 ## Workraround for https://github.com/cosmos/cosmos-sdk/issues/8251
-(echo "$PASSWORD"; echo "$PASSWORD") | furyad gentx $USER "250000000fury" --chain-id="$CHAIN_ID" --amount="250000000fury" -y
+(echo "$PASSWORD"; echo "$PASSWORD") | furyd gentx $USER "250000000fury" --chain-id="$CHAIN_ID" --amount="250000000fury" -y
 
-furyad collect-gentxs
+furyd collect-gentxs
 
 

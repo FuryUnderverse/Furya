@@ -113,7 +113,7 @@ import (
 	intertxtypes "github.com/cosmos/interchain-accounts/x/inter-tx/types"
 
 	// unnamed import of statik for swagger UI support
-	_ "github.com/furyunderverse/furya/doc/statik"
+	_ "github.com/furyunderverse/fury/doc/statik"
 
 	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	feegrantmodule "github.com/cosmos/cosmos-sdk/x/feegrant/module"
@@ -124,15 +124,15 @@ import (
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 	"github.com/cosmos/cosmos-sdk/x/feegrant"
 	ibcclientclient "github.com/cosmos/ibc-go/v4/modules/core/02-client/client"
-	appparams "github.com/furyunderverse/furya/app/params"
-	appconfig "github.com/furyunderverse/furya/cmd/config"
+	appparams "github.com/furyunderverse/fury/app/params"
+	appconfig "github.com/furyunderverse/fury/cmd/config"
 )
 
 const appName = "Furyunderverse"
 
 // We pull these out so we can set them with LDFLAGS in the Makefile
 var (
-	NodeDir = ".furyad"
+	NodeDir = ".furyd"
 
 	BinaryVersion = "v0.41.2"
 
@@ -141,7 +141,7 @@ var (
 	ProposalsEnabled = "true"
 	// If set to non-empty string it must be comma-separated list of values that are all a subset
 	// of "EnableAllProposals" (takes precedence over ProposalsEnabled)
-	// https://github.com/furyunderverse/furya/blob/02a54d33ff2c064f3539ae12d75d027d9c665f05/x/wasm/internal/types/proposal.go#L28-L34
+	// https://github.com/furyunderverse/fury/blob/02a54d33ff2c064f3539ae12d75d027d9c665f05/x/wasm/internal/types/proposal.go#L28-L34
 	EnableSpecificProposals = ""
 )
 

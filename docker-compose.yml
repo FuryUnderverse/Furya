@@ -1,8 +1,8 @@
 version: '3.3'
 services:
-  furya:
-    container_name: furya_node
-    image: furyunderverse/foundation-furya:0.41.2-alpine-dev
+  fury:
+    container_name: fury_node
+    image: furyunderverse/foundation-fury:0.41.2-alpine-dev
     working_dir: /workspace
     tty: true
     ulimits:
@@ -17,10 +17,10 @@ services:
     cap_add:
       - SYS_PTRACE
     env_file:
-      - furya.dev.env
+      - fury.dev.env
     volumes:
       - ./:/workspace
-      - furyavisor:/root/furyavisor
+      - furyvisor:/root/furyvisor
 
   proto:
     image: cosmwasm/prototools-docker
@@ -28,4 +28,4 @@ services:
     volumes:
       - ./:/work
 volumes:
-  furyavisor: null
+  furyvisor: null

@@ -1,8 +1,8 @@
 version: '3.3'
 services:
-  furya:
-    container_name: furya_node
-    image: furyunderverse/foundation-furya:0.41.2-alpine-prod
+  fury:
+    container_name: fury_node
+    image: furyunderverse/foundation-fury:0.41.2-alpine-prod
     working_dir: /workspace
     tty: true
     ulimits:
@@ -17,10 +17,10 @@ services:
     cap_add:
       - SYS_PTRACE
     env_file:
-      - furya.env
+      - fury.env
     volumes:
       - ./:/workspace
-      - furyavisor:/root/furyavisor
+      - furyvisor:/root/furyvisor
 
 volumes:
-  furyavisor: null
+  furyvisor: null

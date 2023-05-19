@@ -1,4 +1,4 @@
-module github.com/furyunderverse/furya/furyavisor
+module github.com/furyunderverse/fury/furyvisor
 
 go 1.14
 

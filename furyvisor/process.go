@@ -1,4 +1,4 @@
-package furyavisor
+package furyvisor
 
 import (
 	"bufio"

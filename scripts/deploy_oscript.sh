@@ -35,7 +35,7 @@ OS_INPUT=${4:-'{"ai_data_source":['$OS_DS'],"testcase":['$OS_TC']}'}
 sh $PWD/scripts/deploy-contract-store-addr.sh $DIR_PATH/smart-contracts/$OS/artifacts/$OS.wasm "$OS $NONCE" "$OS_INPUT" $PASS
 
 # check if the oracle script exists or not
-furyad query provider oscript $OS 2> is_exist.txt
+furyd query provider oscript $OS 2> is_exist.txt
 description="test $OS"
 address=$(cat ../address.txt)
 # if the file is empty, then the oracle script does not exist. We create new
@@ -45,7 +45,7 @@ echo $TC_RAW
 
 if [ -s is_exist.txt ]
 then
-    echo $PASS | furyad tx provider set-oscript $OS $address "$description" --ds ${DS:-classification} --tc ${TC:-classification_testcase} --from $USER --chain-id $CHAIN_ID -y
+    echo $PASS | furyd tx provider set-oscript $OS $address "$description" --ds ${DS:-classification} --tc ${TC:-classification_testcase} --from $USER --chain-id $CHAIN_ID -y
 else
-    echo $PASS | furyad tx provider edit-oscript $OS $OS $address "$description" --ds $DS_RAW --tc $TC_RAW --from $USER --chain-id $CHAIN_ID -y
+    echo $PASS | furyd tx provider edit-oscript $OS $OS $address "$description" --ds $DS_RAW --tc $TC_RAW --from $USER --chain-id $CHAIN_ID -y
 fi

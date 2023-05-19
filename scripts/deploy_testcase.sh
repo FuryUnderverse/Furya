@@ -14,16 +14,16 @@ do
     sh $PWD/scripts/deploy-contract-store-addr.sh $DIR_PATH/smart-contracts/$i/artifacts/$i.wasm "$i $NONCE" "$TC_INPUT" $PASS
 
     # check if the test case exists or not
-    furyad query provider tcase $i 2> is_exist.txt
+    furyd query provider tcase $i 2> is_exist.txt
     description="test $i"
     address=$(cat ../address.txt)
 
     # if the file is empty, then the test case does not exist. We create new
     if [ -s is_exist.txt ]
     then
-        echo $PASS | furyad tx provider set-testcase $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
+        echo $PASS | furyd tx provider set-testcase $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
     else
         # if it exists already, we update the contract
-        echo $PASS | furyad tx provider edit-testcase $i $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
+        echo $PASS | furyd tx provider edit-testcase $i $i $address "$description" --from $USER --chain-id $CHAIN_ID -y
     fi
 done

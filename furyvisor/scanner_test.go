@@ -1,11 +1,11 @@
-package furyavisor_test
+package furyvisor_test
 
 import (
 	"bufio"
 	"io"
 	"testing"
 
-	"github.com/furyunderverse/furya/furyavisor"
+	"github.com/furyunderverse/fury/furyvisor"
 
 	"github.com/stretchr/testify/require"
 )
@@ -13,7 +13,7 @@ import (
 func TestWaitForInfo(t *testing.T) {
 	cases := map[string]struct {
 		write         []string
-		expectUpgrade *furyavisor.UpgradeInfo
+		expectUpgrade *furyvisor.UpgradeInfo
 		expectErr     bool
 	}{
 		"no match": {
@@ -21,7 +21,7 @@ func TestWaitForInfo(t *testing.T) {
 		},
 		"match name with no info": {
 			write: []string{"first line\n", `UPGRADE "myname" NEEDED at height: 123: `, "\nnext line\n"},
-			expectUpgrade: &furyavisor.UpgradeInfo{
+			expectUpgrade: &furyvisor.UpgradeInfo{
 				Name: "myname",
 				Info: "",
 			},
@@ -29,7 +29,7 @@ func TestWaitForInfo(t *testing.T) {
 		"match name with info": {
 			write: []string{"first line\n",
 				`UPGRADE "take2" NEEDED at height: 123:   https://ipfs.io/ipfs/Qmahj5DWvXanBji73YywYuDs9dXA2Cm3dfsLMtvxL7GsJC`, "\nnext line\n"},
-			expectUpgrade: &furyavisor.UpgradeInfo{
+			expectUpgrade: &furyvisor.UpgradeInfo{
 				Name: "take2",
 				Info: "https://ipfs.io/ipfs/QmSymqJhmDAqa5CkfDpri8Pjt3rfL1qbGT3CC7XqXEnaBo",
 			},
@@ -52,7 +52,7 @@ func TestWaitForInfo(t *testing.T) {
 			}()
 
 			// now scan the info
-			info, err := furyavisor.WaitForUpdate(scan)
+			info, err := furyvisor.WaitForUpdate(scan)
 			if tc.expectErr {
 				require.Error(t, err)
 				return

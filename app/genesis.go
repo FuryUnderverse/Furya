@@ -10,7 +10,7 @@ import (
 	gov "github.com/cosmos/cosmos-sdk/x/gov/types"
 	mint "github.com/cosmos/cosmos-sdk/x/mint/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
-	appconfig "github.com/furyunderverse/furya/cmd/config"
+	appconfig "github.com/furyunderverse/fury/cmd/config"
 )
 
 // GenesisState default state for the application

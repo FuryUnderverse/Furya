@@ -1,8 +1,8 @@
 version: '3.3'
 services:
-  furya:
-    container_name: furya_node
-    image: furya/furya:mainnet-alpine
+  fury:
+    container_name: fury_node
+    image: fury/fury:mainnet-alpine
     working_dir: /workspace
     tty: true
     ports:
@@ -12,7 +12,7 @@ services:
     cap_add:
       - SYS_PTRACE
     env_file: 
-      - furya.env
+      - fury.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./:/workspace
